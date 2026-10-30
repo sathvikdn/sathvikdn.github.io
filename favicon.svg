@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <defs><linearGradient id="mark" x2="1" y2="1"><stop stop-color="#365261"/><stop offset="1" stop-color="#223944"/></linearGradient></defs>
+  <rect width="32" height="32" rx="8" fill="url(#mark)"/>
+  <circle cx="27" cy="5" r="2.5" fill="#d6a674"/>
+  <text x="16" y="21" text-anchor="middle" font-family="sans-serif" font-weight="800" font-size="12" fill="#fff">SD</text>
+</svg>
