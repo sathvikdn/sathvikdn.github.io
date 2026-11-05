@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; font-src 'none'; script-src 'none'; connect-src 'none'; frame-src 'none'">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMS Kafka Monitoring Dashboard — Built with AI</title>
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden}
+body{font-family:'Inter',system-ui,sans-serif;background:#e8f0fc;color:#162b4c}
+
+.poster{width:100vw;height:100vh;display:flex;flex-direction:column;padding:2vh 3vw;position:relative;overflow:hidden}
+.poster::before{content:'';position:absolute;top:-10vh;right:-5vw;width:40vw;height:40vw;background:radial-gradient(circle,rgba(51,117,195,.08) 0%,transparent 70%);border-radius:50%;pointer-events:none}
+.poster::after{content:'';position:absolute;bottom:-15vh;left:-8vw;width:45vw;height:45vw;background:radial-gradient(circle,rgba(22,43,76,.06) 0%,transparent 70%);border-radius:50%;pointer-events:none}
+
+/* HEADER */
+.hdr{border-bottom:2px solid #b1cffb;padding-bottom:1vh;margin-bottom:1.2vh;flex-shrink:0}
+.hdr h1{font-family:'DM Serif Display',serif;font-size:2.2vw;font-weight:400;line-height:1.15;letter-spacing:-.02em}
+.hdr h1 span{color:#3375c3}
+.hdr .sub{font-size:.75vw;opacity:.85;margin-top:.3vh;line-height:1.5}
+
+/* STORY BANNER */
+.story{background:#fff;border:1px solid #b1cffb;border-radius:10px;padding:1.2vh 1.8vw;display:flex;align-items:center;gap:1.2vw;margin-bottom:1.2vh;flex-shrink:0;box-shadow:0 2px 8px rgba(22,43,76,.06)}
+.story-icon{flex-shrink:0;width:3.2vw;height:3.2vw;background:#162b4c;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.story-icon svg{width:1.6vw;height:1.6vw}
+.story p{font-size:.78vw;line-height:1.6}
+.story .hl{color:#3375c3;font-weight:700}
+.story .hlr{color:#514054;font-weight:700}
+
+/* BIG NUMBERS */
+.bigs{display:grid;grid-template-columns:repeat(5,1fr);gap:.8vw;margin-bottom:1.2vh;flex-shrink:0}
+.big{text-align:center;background:#fff;border:1px solid #b1cffb;border-radius:10px;padding:1.4vh .5vw;position:relative;overflow:hidden;box-shadow:0 2px 6px rgba(22,43,76,.05)}
+.big::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:10px 10px 0 0}
+.big .val{font-family:'DM Serif Display',serif;font-size:2.2vw;font-weight:400;line-height:1}
+.big .lbl{font-size:.6vw;font-weight:700;margin-top:.3vh;text-transform:uppercase;letter-spacing:.5px}
+.big .hint{font-size:.48vw;opacity:.8;margin-top:.2vh;font-weight:500}
+.big-blue::before{background:#3375c3} .big-blue .val{color:#3375c3}
+.big-green::before{background:#6f96df} .big-green .val{color:#6f96df}
+.big-orange::before{background:#87bcfc} .big-orange .val{color:#514054}
+.big-red::before{background:#162b4c} .big-red .val{color:#162b4c}
+.big-purple::before{background:#514054} .big-purple .val{color:#514054}
+
+/* MID SECTION */
+.mid{display:grid;grid-template-columns:1fr 1fr;gap:1vw;flex:1;min-height:0;margin-bottom:1.2vh}
+.panel{background:#fff;border:1px solid #b1cffb;border-radius:10px;padding:1.4vh 1.3vw;display:flex;flex-direction:column;min-height:0;box-shadow:0 2px 6px rgba(22,43,76,.05)}
+.panel h3{font-family:'DM Serif Display',serif;font-size:1vw;font-weight:400;margin-bottom:.8vh;display:flex;align-items:center;gap:.4vw;flex-shrink:0}
+.panel h3 .bar{width:4px;height:2vh;border-radius:2px;flex-shrink:0}
+
+/* Feature list */
+.features{flex:1;display:flex;flex-direction:column;justify-content:space-evenly}
+.feat{display:flex;align-items:flex-start;gap:.7vw}
+.feat-icon{width:2.2vw;height:2.2vw;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1vw}
+.feat-body h4{font-size:.78vw;font-weight:700;line-height:1.3}
+.feat-body p{font-size:.6vw;opacity:.85;line-height:1.5;margin-top:.15vh}
+
+/* Visual diagrams */
+.diagrams{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;gap:.3vh}
+.diag-label{font-size:.5vw;font-weight:800;text-transform:uppercase;letter-spacing:1px;opacity:.6;margin-bottom:.3vh}
+
+/* Architecture flow */
+.arch-flow{display:flex;align-items:center;justify-content:center;gap:.3vw}
+.arch-box{padding:.4vh .5vw;border-radius:6px;font-size:.5vw;font-weight:700;text-align:center;color:#fff;line-height:1.3;min-width:4.5vw}
+.arch-box small{display:block;font-weight:400;font-size:.38vw;opacity:.85;margin-top:.15vh}
+.arch-arrow{font-size:.8vw;color:#87bcfc;flex-shrink:0}
+
+/* Pipeline bars */
+.pipe-row{display:flex;align-items:center;gap:.4vw}
+.pipe-label{font-size:.45vw;font-weight:700;width:3.5vw;text-align:right;flex-shrink:0;opacity:.8}
+.pipe-track{flex:1;height:1.5vh;background:rgba(44,59,77,.05);border-radius:4px;overflow:hidden;position:relative}
+.pipe-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:.4vw;font-size:.4vw;font-weight:700;color:#fff}
+
+/* Node grid mock */
+.node-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:.25vw}
+.node-cell{border-radius:3px;position:relative;display:flex;align-items:center;justify-content:center;font-size:.32vw;font-weight:700;color:rgba(255,255,255,.9);padding:.3vh 0}
+.node-cell.green{background:#3375c3}
+.node-cell.yellow{background:#6f96df}
+.node-cell.red{background:#514054}
+.node-cell.gray{background:#b1cffb}
+.node-legend{display:flex;gap:1vw;margin-top:.3vh;justify-content:center}
+.node-legend span{display:flex;align-items:center;gap:.2vw;font-size:.42vw;opacity:.7}
+.node-legend .dot{width:.4vw;height:.4vw;border-radius:50%}
+
+/* BOTTOM */
+.bottom{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:.8vw;margin-bottom:.8vh;flex-shrink:0;align-items:center}
+.bot-card{background:#fff;border:1px solid #b1cffb;border-radius:8px;padding:1.2vh 1vw;display:flex;align-items:flex-start;gap:.6vw;box-shadow:0 1px 4px rgba(22,43,76,.04)}
+.bot-icon{width:2vw;height:2vw;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bot-icon svg{width:1vw;height:1vw}
+.bot-card h4{font-size:.65vw;font-weight:700;margin-bottom:.15vh}
+.bot-card p{font-size:.52vw;opacity:.85;line-height:1.45}
+
+/* FOOTER */
+.ftr{text-align:center;border-top:2px solid #b1cffb;padding-top:.8vh;font-size:.62vw;opacity:.9;flex-shrink:0}
+.ftr b{color:#162b4c;opacity:1}
+.ftr .hl{color:#3375c3;font-weight:700;opacity:1}
+
+/* Scale up for 1920 viewport */
+@media(max-width:2000px){
+  .poster{font-size:1.3em}
+  .hdr h1{font-size:2.8vw}
+  .hdr .sub{font-size:.95vw}
+  .story p{font-size:.95vw}
+  .big .val{font-size:2.8vw}
+  .big .lbl{font-size:.78vw}
+  .big .hint{font-size:.6vw}
+  .panel h3{font-size:1.25vw}
+  .feat-icon{width:2.6vw;height:2.6vw;font-size:1.2vw}
+  .feat-body h4{font-size:.95vw}
+  .feat-body p{font-size:.78vw}
+  .arch-box{font-size:.62vw;min-width:5.5vw;padding:.6vh .6vw}
+  .arch-box small{font-size:.48vw}
+  .arch-arrow{font-size:1vw}
+  .diag-label{font-size:.62vw}
+  .pipe-label{font-size:.58vw;width:4.5vw}
+  .pipe-fill{font-size:.52vw}
+  .node-cell{font-size:.4vw}
+  .node-legend span{font-size:.55vw}
+  .bot-card h4{font-size:.82vw}
+  .bot-card p{font-size:.68vw}
+  .bot-icon svg{width:1.3vw;height:1.3vw}
+  .ftr{font-size:.78vw}
+}
+</style>
+<style>
+@media screen {
+  html,body{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto}
+  .poster{width:100%;max-width:1600px;height:auto;min-height:100vh;margin:0 auto;padding:clamp(20px,2vw,38px);overflow:visible}
+  .poster::after{bottom:0}
+  .hdr{padding-bottom:18px;margin-bottom:16px}
+  .hdr h1{font-size:clamp(30px,2.5vw,46px)}
+  .hdr .sub{font-size:clamp(14px,1.05vw,17px)}
+  .story{gap:16px;padding:18px;margin-bottom:16px}
+  .story-icon{width:48px;height:48px}
+  .story-icon svg{width:24px;height:24px}
+  .story p{font-size:clamp(14px,1.03vw,17px)}
+  .bigs{gap:12px;margin-bottom:16px}
+  .big{padding:18px 12px;overflow:visible}
+  .big .val{font-size:clamp(30px,2.9vw,46px)}
+  .big .lbl{font-size:clamp(12px,.9vw,15px)}
+  .big .hint{font-size:clamp(11px,.75vw,13px)}
+  .mid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;flex:none;min-height:auto;margin-bottom:14px}
+  .panel{min-width:0;min-height:auto;padding:18px;gap:12px}
+  .panel h3{font-size:clamp(19px,1.4vw,24px);margin-bottom:8px}
+  .panel h3 .bar{height:24px}
+  .features,.diagrams{flex:none;gap:12px}
+  .feat{gap:12px}
+  .feat-icon{width:38px;height:38px;font-size:19px}
+  .feat-body h4{font-size:15px}
+  .feat-body p{font-size:13px}
+  .diag-label{font-size:12px;margin-bottom:7px}
+  .arch-flow{gap:8px}
+  .arch-box{min-width:0;padding:9px;font-size:12px;overflow-wrap:anywhere}
+  .arch-box small{font-size:11px}
+  .arch-arrow{font-size:18px}
+  .pipe-row{gap:8px}
+  .pipe-label{width:78px;font-size:11px}
+  .pipe-track{height:25px}
+  .pipe-fill{padding-left:6px;font-size:10px}
+  .node-grid{grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
+  .node-cell{min-height:27px;font-size:10px;overflow-wrap:anywhere}
+  .node-legend{flex-wrap:wrap;gap:8px 13px;margin-top:8px}
+  .node-legend span{gap:5px;font-size:11px}
+  .node-legend .dot{width:8px;height:8px}
+  .bottom{gap:12px;margin-bottom:15px}
+  .bot-card{min-width:0;gap:10px;padding:14px}
+  .bot-icon{width:32px;height:32px}
+  .bot-icon svg{width:18px;height:18px}
+  .bot-card h4{font-size:14px}
+  .bot-card p{font-size:12px}
+  .bottom > div:not(.bot-card) div{font-size:12px!important}
+  .ftr{font-size:12px;padding-top:12px}
+}
+@media screen and (max-width:1100px) {
+  .bigs{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .mid{grid-template-columns:minmax(0,1fr)}
+  .bottom{grid-template-columns:minmax(0,1fr)}
+  .bottom > div:not(.bot-card){text-align:center}
+}
+@media screen and (max-width:680px) {
+  .poster{padding:18px 14px}
+  .story{align-items:flex-start;padding:14px;gap:12px}
+  .story-icon{width:40px;height:40px}
+  .story-icon svg{width:20px;height:20px}
+  .bigs{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .big{padding:15px 8px}
+  .big:last-child:nth-child(odd){grid-column:1/-1}
+  .panel{padding:15px}
+  .arch-flow{flex-direction:column}
+  .arch-box{width:100%;padding:12px;font-size:14px}
+  .arch-arrow{transform:rotate(90deg)}
+  .node-cell{min-height:31px}
+  .bottom > div:not(.bot-card){padding:2px 0!important}
+}
+@media screen and (max-width:360px) {
+  .pipe-label{width:66px;font-size:10px}
+  .node-grid{gap:2px}
+  .node-cell{min-height:34px;font-size:10px}
+}
+</style>
+</head>
+<body>
+<div class="poster">
+
+<!-- HEADER -->
+<div class="hdr">
+  <h1>Real-Time CMS Monitoring &mdash; <span>Built Entirely with AI</span></h1>
+  <div class="sub">A full-stack operational dashboard for the Kafka-based CMS data pipeline, built from scratch using AI pair programming. Embedded directly inside Pega, providing 24/7 visibility across 6 APAC markets with 50+ Kafka topics and 20+ Kubernetes nodes.</div>
+</div>
+
+<!-- STORY -->
+<div class="story">
+  <div class="story-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#6f96df" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+  </div>
+  <p>Our Kafka-based CMS pipeline processes data across <b>6 APAC markets</b> with <b>50+ Kafka topics</b> on <b>20+ Kubernetes nodes</b>. There was <span class="hlr">zero operational visibility</span> &mdash; failures were discovered hours later via email complaints. AI was used <span class="hl">to build a complete monitoring dashboard from scratch</span> in days, not months. It runs <b>inside Pega</b> via Data Pages, with <span class="hl">dark/light themes, real-time charts, node health tracking, one-click requeue, and historical comparison</span> &mdash; capabilities that would normally require a dedicated engineering team.</p>
+</div>
+
+<!-- BIG NUMBERS -->
+<div class="bigs">
+  <div class="big big-blue"><div class="val">8</div><div class="lbl">Tabs / Views</div><div class="hint">Monitoring to Manual ops</div></div>
+  <div class="big big-green"><div class="val">50+</div><div class="lbl">Kafka Topics</div><div class="hint">Tracked in real-time</div></div>
+  <div class="big big-orange"><div class="val">20+</div><div class="lbl">K8s Nodes</div><div class="hint">Health pulse every minute</div></div>
+  <div class="big big-red"><div class="val">0</div><div class="lbl">External Tools</div><div class="hint">100% built in-house</div></div>
+  <div class="big big-purple"><div class="val">6</div><div class="lbl">Markets Served</div><div class="hint">AU, MY, NZ, SG, JP, TH</div></div>
+</div>
+
+<!-- TWO PANELS -->
+<div class="mid">
+  <!-- Left: Key Capabilities -->
+  <div class="panel">
+    <h3><span class="bar" style="background:linear-gradient(180deg,#3375c3,#162b4c)"></span>What the Dashboard Does</h3>
+    <div class="features">
+      <div class="feat">
+        <div class="feat-icon" style="background:rgba(51,117,195,.1);color:#3375c3">&#9888;</div>
+        <div class="feat-body"><h4 style="color:#3375c3">Broken Query &amp; Failed Merge Detection</h4><p>Surfaces every failed Kafka message and failed merge query instantly &mdash; filterable by topic, table, error type with full JSON inspection</p></div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon" style="background:rgba(111,150,223,.12);color:#6f96df">&#9829;</div>
+        <div class="feat-body"><h4 style="color:#514054">Node Health &amp; Zombie Detection</h4><p>Minute-level heartbeat grid for 20+ nodes. Detects vanished pods, K8s rotations, idle nodes, and stream session staleness automatically</p></div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon" style="background:rgba(22,43,76,.08);color:#162b4c">&#8644;</div>
+        <div class="feat-body"><h4 style="color:#162b4c">One-Click Requeue</h4><p>Select failed messages, view/edit JSON payload, requeue single elements or full messages back to Kafka &mdash; all from the browser</p></div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon" style="background:rgba(135,188,252,.12);color:#87bcfc">&#9201;</div>
+        <div class="feat-body"><h4 style="color:#3375c3">Historical Comparison</h4><p>Compare any two time windows side-by-side: throughput, errors, node health, topic performance &mdash; with auto-generated delta analysis</p></div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon" style="background:rgba(81,64,84,.08);color:#514054">&#9783;</div>
+        <div class="feat-body"><h4 style="color:#514054">Embedded in Pega</h4><p>No external infra. Runs as a single HTML section inside Pega, fetching data through Pega Data Pages &mdash; zero deployment overhead</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Visual Architecture & Diagrams -->
+  <div class="panel">
+    <h3><span class="bar" style="background:linear-gradient(180deg,#87bcfc,#3375c3)"></span>How It Works &mdash; Visually</h3>
+    <div class="diagrams">
+
+      <!-- Architecture Flow -->
+      <div>
+        <div class="diag-label">Data Flow Architecture</div>
+        <div class="arch-flow">
+          <div class="arch-box" style="background:#162b4c">Kafka<small>50+ Topics</small></div>
+          <div class="arch-arrow">&rarr;</div>
+          <div class="arch-box" style="background:#514054">Pega Nodes<small>20+ K8s Pods</small></div>
+          <div class="arch-arrow">&rarr;</div>
+          <div class="arch-box" style="background:#3375c3">SQL Server<small>Merge + Audit</small></div>
+          <div class="arch-arrow">&rarr;</div>
+          <div class="arch-box" style="background:#6f96df">Dashboard<small>Real-time View</small></div>
+        </div>
+      </div>
+
+      <!-- Topic Throughput Bars -->
+      <div>
+        <div class="diag-label">Sample Topic Throughput (records/day)</div>
+        <div style="display:flex;flex-direction:column;gap:.4vh">
+          <div class="pipe-row"><div class="pipe-label">CONT-INFO</div><div class="pipe-track"><div class="pipe-fill" style="width:85%;background:linear-gradient(90deg,#162b4c,#3375c3)">42,300</div></div></div>
+          <div class="pipe-row"><div class="pipe-label">RNTL-ALOC</div><div class="pipe-track"><div class="pipe-fill" style="width:65%;background:linear-gradient(90deg,#3375c3,#6f96df)">31,200</div></div></div>
+          <div class="pipe-row"><div class="pipe-label">RCPT-DETL</div><div class="pipe-track"><div class="pipe-fill" style="width:50%;background:linear-gradient(90deg,#514054,#87bcfc)">24,800</div></div></div>
+          <div class="pipe-row"><div class="pipe-label">CUST-ADDR</div><div class="pipe-track"><div class="pipe-fill" style="width:35%;background:linear-gradient(90deg,#6f96df,#b1cffb)">16,500</div></div></div>
+          <div class="pipe-row"><div class="pipe-label">Others (46)</div><div class="pipe-track"><div class="pipe-fill" style="width:70%;background:linear-gradient(90deg,#514054,#6f96df)">~45,000</div></div></div>
+        </div>
+      </div>
+
+      <!-- Node Health Grid Mock -->
+      <div>
+        <div class="diag-label">Node Health Pulse Grid (simulated hour view)</div>
+        <div class="node-grid">
+          <div class="node-cell green">B1</div><div class="node-cell green">B2</div><div class="node-cell green">B3</div><div class="node-cell green">B4</div><div class="node-cell green">B5</div><div class="node-cell green">B6</div><div class="node-cell green">B7</div><div class="node-cell green">B8</div><div class="node-cell yellow">S1</div><div class="node-cell green">S2</div>
+          <div class="node-cell green">B1</div><div class="node-cell green">B2</div><div class="node-cell yellow">B3</div><div class="node-cell green">B4</div><div class="node-cell green">B5</div><div class="node-cell green">B6</div><div class="node-cell green">B7</div><div class="node-cell green">B8</div><div class="node-cell green">S1</div><div class="node-cell green">S2</div>
+          <div class="node-cell green">B1</div><div class="node-cell green">B2</div><div class="node-cell green">B3</div><div class="node-cell green">B4</div><div class="node-cell red">B5</div><div class="node-cell green">B6</div><div class="node-cell green">B7</div><div class="node-cell green">B8</div><div class="node-cell green">S1</div><div class="node-cell gray">S2</div>
+        </div>
+        <div class="node-legend">
+          <span><span class="dot" style="background:#3375c3"></span> Working</span>
+          <span><span class="dot" style="background:#6f96df"></span> Idle</span>
+          <span><span class="dot" style="background:#514054"></span> Down</span>
+          <span><span class="dot" style="background:#b1cffb"></span> Rotated</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM STRIP with Before/After integrated -->
+<div class="bottom">
+  <div class="bot-card">
+    <div class="bot-icon" style="background:rgba(51,117,195,.08)"><svg viewBox="0 0 24 24" fill="none" stroke="#3375c3" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+    <div><h4 style="color:#3375c3">Built in Days, Not Months</h4><p>AI generated 5,500+ lines of production-quality HTML/JS/CSS &mdash; Chart.js charts, dark/light themes, responsive tables</p></div>
+  </div>
+  <div style="text-align:center;padding:0 .3vw">
+    <div style="background:rgba(81,64,84,.06);border:1px solid rgba(81,64,84,.2);border-radius:8px;padding:.6vh .6vw">
+      <div style="font-size:.4vw;font-weight:700;text-transform:uppercase;color:#514054;letter-spacing:.5px">Before</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:1.6vw;color:#514054;line-height:1">Hours</div>
+      <div style="font-size:.35vw;opacity:.7">to find failures</div>
+    </div>
+    <div style="font-family:'DM Serif Display',serif;font-size:1.2vw;color:#3375c3;margin:.2vh 0">&darr;</div>
+    <div style="background:rgba(51,117,195,.06);border:1px solid rgba(51,117,195,.2);border-radius:8px;padding:.6vh .6vw">
+      <div style="font-size:.4vw;font-weight:700;text-transform:uppercase;color:#3375c3;letter-spacing:.5px">After</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:1.6vw;color:#3375c3;line-height:1">Seconds</div>
+      <div style="font-size:.35vw;opacity:.7">real-time visibility</div>
+    </div>
+  </div>
+  <div class="bot-card">
+    <div class="bot-icon" style="background:rgba(22,43,76,.06)"><svg viewBox="0 0 24 24" fill="none" stroke="#162b4c" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+    <div><h4 style="color:#162b4c">Replaced 3 Manual Processes</h4><p>Daily Excel reports, manual log scanning, and email-based error notifications &mdash; all replaced by one dashboard</p></div>
+  </div>
+  <div style="text-align:center;padding:0 .3vw">
+    <div style="background:rgba(22,43,76,.06);border:1px solid rgba(22,43,76,.15);border-radius:8px;padding:.8vh .6vw">
+      <div style="font-size:.4vw;font-weight:700;text-transform:uppercase;color:#162b4c;letter-spacing:.5px">Lines of Code</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:1.6vw;color:#162b4c;line-height:1">5,500+</div>
+      <div style="font-size:.35vw;opacity:.7">production HTML/JS/CSS</div>
+    </div>
+  </div>
+  <div class="bot-card">
+    <div class="bot-icon" style="background:rgba(111,150,223,.1)"><svg viewBox="0 0 24 24" fill="none" stroke="#6f96df" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+    <div><h4 style="color:#514054">Zero Downtime Deployment</h4><p>Runs inside Pega &mdash; no servers, no CI/CD, no infra. Updated by pasting HTML into Pega Section</p></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="ftr">
+  <b>Bottom Line:</b> AI didn't just help write code &mdash; it <span class="hl">architected a complete operational tool</span> from scratch. What would have required a frontend team and months of development was delivered by one developer with AI in days.
+</div>
+
+</div>
+</body>
+</html>
