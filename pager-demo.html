@@ -46,12 +46,23 @@ body.controls-hidden{--bottom:28px}.controls-hidden .presenter-toolbar{transform
 @media(max-width:390px){:root{--page-pad:13px}.top .brand{gap:7px;font-size:20px}.top-actions{gap:5px}.toolbar-icon,.toolbar-text{width:31px;height:31px}.play-control{min-width:122px;font-size:10px;padding:11px 10px}.dock-action{font-size:9px;padding:10px 8px;gap:5px}.dock-row{gap:6px}.stage-control{font-size:9px}.story h1{font-size:25px}.eyebrow{font-size:7px}}
 @media(max-height:500px) and (min-width:761px){:root{--top:55px;--bottom:83px}.stage{gap:20px}.story h1{font-size:clamp(28px,7.9vh,42px);margin-bottom:13px}.eyebrow{margin-bottom:12px;font-size:8px}.story p{font-size:12px;line-height:1.5;margin-bottom:13px}.stage-pill{font-size:10px}.steps{margin-top:18px}.stage-foot{display:none}.top-caption{display:none}.toolbar-icon,.toolbar-text{height:31px}.dock-caption{font-size:7px;margin-top:5px}.presenter-toolbar{padding-bottom:7px}.dock-row{padding:7px 10px}.play-control,.dock-action{padding-top:8px;padding-bottom:8px}.stage-control{padding-top:7px;padding-bottom:7px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style><style>
+.engine-room{max-width:445px;margin:19px 0 0;padding:14px 16px;border:1px solid #396477;border-radius:12px;background:#0d2531;color:var(--ink)}
+.engine-room summary{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mint)}
+.engine-room summary::-webkit-details-marker{display:none}.engine-room summary small{font-size:9px;font-weight:650;letter-spacing:.03em;color:var(--muted);text-align:right}
+.trace-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:12px}.trace-item{min-width:0;padding:9px 10px;border:1px solid #355365;border-radius:7px;background:#122f3b}
+.trace-item strong{display:block;font:700 9px ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--mint)}.trace-item span{display:block;margin-top:4px;font-size:11px;line-height:1.35;color:#e0edf2}
+.trace-wire{display:block;max-height:68px;overflow:auto;margin:10px 0 0;padding:10px;border:1px dashed #52858e;border-radius:7px;background:#071b28;color:#c8f4dc;font:11px/1.45 ui-monospace,monospace;overflow-wrap:anywhere}
+.trace-note{margin:9px 0 0!important;max-width:none!important;color:#adcad5!important;font-size:10px!important;line-height:1.4!important}.story .steps{margin-top:17px}
+@media(max-width:760px){.engine-room{position:absolute;z-index:9;top:48px;left:4px;right:4px;max-width:none;margin:0;padding:9px 11px;text-align:left;box-shadow:0 12px 35px #0009}.engine-room:not([open]){background:#17323d}.engine-room[open]{max-height:min(48vh,310px);overflow:auto}.engine-room summary{font-size:9px}.engine-room summary small{font-size:8px}.trace-item{padding:7px}.trace-item span{font-size:10px}.trace-note{display:block!important}.story .steps{display:none}}
+@media(max-width:760px){.stage-controls{justify-content:space-between;gap:2px;overflow-x:auto}.stage-control{flex:0 1 auto;min-width:0;padding:7px 2px;font-size:9px;gap:0}.stage-control .step-num{display:none}}
+@media(max-height:720px) and (min-width:761px){.engine-room{margin-top:10px;padding:10px 12px}.trace-grid{margin-top:7px}.trace-item{padding:7px}.trace-note{margin-top:5px!important}.story .steps{margin-top:11px}}
 </style></head>
 <body data-state="quiet">
 <header class="top" id="topbar"><div class="top-identity"><div class="brand"><span class="brand-mark" id="logo"></span>Pager</div><span class="top-caption">DEMO SERVICE / Mobile alert experience</span></div><div class="top-actions"><span class="sample-tag">Interactive concept</span><button class="toolbar-icon" id="sound" aria-label="Enable demo sound" aria-pressed="false" title="Enable demo sound"></button><button class="toolbar-text" id="focusPhone" aria-label="Show phone only" aria-pressed="false" title="Phone-only view (P)"><span id="focusIcon"></span><span class="button-label" id="focusLabel">Phone only</span></button><button class="toolbar-text" id="fullscreen" aria-label="Enter fullscreen" title="Toggle fullscreen (F)"><span id="fullIcon"></span><span class="button-label" id="fullLabel">Fullscreen</span></button><button class="toolbar-icon" id="controlsToggle" aria-label="Hide presenter controls" aria-expanded="true" aria-controls="toolbar" title="Hide presenter controls (H)"></button><button class="toolbar-icon help-toggle" id="help" aria-label="Help and keyboard shortcuts" title="Help and keyboard shortcuts"></button></div></header>
-<main class="stage" id="stage" aria-label="Fullscreen presentation with a mobile phone demo"><section class="story" id="story" aria-live="polite" aria-atomic="true"><div class="eyebrow" id="storyTag"></div><h1 id="storyTitle"></h1><p id="storyCopy"></p><div class="stage-pill" id="storyPill"></div><div class="steps" id="steps" aria-hidden="true"></div><div class="stage-foot" id="stageFoot"></div></section><div class="phone-wrap" id="phoneWrap"><div class="phone" id="phone" role="group" aria-label="Simulated mobile phone"><div class="screen" id="screen"></div></div></div></main>
-<aside class="presenter-toolbar" id="toolbar" aria-label="Presenter controls, not part of the mobile app"><div class="control-dock"><div class="playback-track" aria-hidden="true"><div class="playback-fill" id="progressFill"></div></div><div class="dock-row"><button class="play-control" id="play"></button><nav class="stage-controls" aria-label="Demo stages"><button class="stage-control" data-stage="quiet" aria-current="step"><span class="step-num">01</span>Quiet</button><button class="stage-control" data-stage="alert"><span class="step-num">02</span>Alert</button><button class="stage-control" data-stage="detail"><span class="step-num">03</span>Details</button><button class="stage-control" data-stage="ack"><span class="step-num">04</span>Acknowledged</button></nav><div class="playback-time"><b id="elapsed">00:00</b> / 00:20</div><span class="dock-divider"></span><button class="dock-action" id="failure"></button><button class="dock-action" id="reset" aria-label="Reset demo" title="Reset demo (R)"></button></div></div><div class="dock-caption"><strong>Presenter controls</strong><span class="separator">·</span>Simulated alerts · sample data<span class="desktop-tip"><span class="separator">·</span>Space: play/pause<span class="separator">·</span>H: hide controls</span></div></aside><div class="clean-caption">SIMULATED DEMO · NO REAL ALERTS · H: SHOW CONTROLS</div><div class="sr-only" id="announcement" aria-live="polite" aria-atomic="true"></div><div class="toast" id="toast" role="status"></div><div class="tap-indicator" id="tap" aria-hidden="true"></div>
-<div class="help-backdrop" id="helpBackdrop" hidden><section class="help-card" role="dialog" aria-modal="true" aria-labelledby="helpTitle"><div class="help-head"><h2 id="helpTitle">A mobile demo. A full-screen stage.</h2><button class="toolbar-icon" id="closeHelp" aria-label="Close help"></button></div><p>The phone keeps its portrait shape and scales to your window. Play the 20-second walkthrough, or trigger an alert and tap through it yourself.</p><div class="shortcuts"><div class="shortcut"><span>Play or pause the walkthrough</span><kbd>Space</kbd></div><div class="shortcut"><span>Enter or exit browser fullscreen</span><kbd>F</kbd></div><div class="shortcut"><span>Hide or show presenter controls</span><kbd>H</kbd></div><div class="shortcut"><span>Phone-only view / story and phone</span><kbd>P</kbd></div><div class="shortcut"><span>Previous or next demo stage</span><kbd>← →</kbd></div><div class="shortcut"><span>Reset the demonstration</span><kbd>R</kbd></div></div><p class="fine-print">Offline HTML prototype; no live checks or real push notifications. The locked phone and notification are simulated inside this page. Opening the alert simulates app access, not real authentication. Acknowledgement is a local “seen” confirmation for this session, not a fix or a command to the monitored system. Sample timestamps are not measured response times. This version ends at acknowledgement.</p></section></div><noscript><div class="help-backdrop"><section class="help-card"><h2>Enable JavaScript to play the demo.</h2><p>This HTML file contains an interactive phone simulation. Open it in a browser with JavaScript enabled.</p></section></div></noscript>
+<main class="stage" id="stage" aria-label="Fullscreen presentation with a mobile phone demo"><section class="story" id="story" aria-live="polite" aria-atomic="true"><div class="eyebrow" id="storyTag"></div><h1 id="storyTitle"></h1><p id="storyCopy"></p><div class="stage-pill" id="storyPill"></div><details class="engine-room" id="engineRoom" open><summary>Engineering trace <small>INTERACTIVE DEMO / SAMPLE DATA</small></summary><div class="trace-grid" id="traceItems"></div><code class="trace-wire" id="wirePayload" hidden></code><p class="trace-note" id="traceNote"></p></details><div class="steps" id="steps" aria-hidden="true"></div><div class="stage-foot" id="stageFoot"></div></section><div class="phone-wrap" id="phoneWrap"><div class="phone" id="phone" role="group" aria-label="Simulated mobile phone"><div class="screen" id="screen"></div></div></div></main>
+<aside class="presenter-toolbar" id="toolbar" aria-label="Presenter controls, not part of the mobile app"><div class="control-dock"><div class="playback-track" aria-hidden="true"><div class="playback-fill" id="progressFill"></div></div><div class="dock-row"><button class="play-control" id="play"></button><nav class="stage-controls" aria-label="Demo stages"><button class="stage-control" data-stage="quiet" aria-current="step"><span class="step-num">01</span>Problem</button><button class="stage-control" data-stage="failure"><span class="step-num">02</span>Failures</button><button class="stage-control" data-stage="encoded"><span class="step-num">03</span>Encoding</button><button class="stage-control" data-stage="alert"><span class="step-num">04</span>Delivery</button><button class="stage-control" data-stage="detail"><span class="step-num">05</span>Phone</button><button class="stage-control" data-stage="ack"><span class="step-num">06</span>Acknowledged</button></nav><div class="playback-time"><b id="elapsed">00:00</b> / 00:27</div><span class="dock-divider"></span><button class="dock-action" id="failure"></button><button class="dock-action" id="reset" aria-label="Reset demo" title="Reset demo (R)"></button></div></div><div class="dock-caption"><strong>Presenter controls</strong><span class="separator">·</span>Simulated alerts · sample data<span class="desktop-tip"><span class="separator">·</span>Space: play/pause<span class="separator">·</span>H: hide controls</span></div></aside><div class="clean-caption">SIMULATED DEMO · NO REAL ALERTS · H: SHOW CONTROLS</div><div class="sr-only" id="announcement" aria-live="polite" aria-atomic="true"></div><div class="toast" id="toast" role="status"></div><div class="tap-indicator" id="tap" aria-hidden="true"></div>
+<div class="help-backdrop" id="helpBackdrop" hidden><section class="help-card" role="dialog" aria-modal="true" aria-labelledby="helpTitle"><div class="help-head"><h2 id="helpTitle">A mobile demo. A full-screen stage.</h2><button class="toolbar-icon" id="closeHelp" aria-label="Close help"></button></div><p>The phone keeps its portrait shape and scales to your window. Play the 27-second walkthrough, or inject a sample failure and tap through it yourself.</p><div class="shortcuts"><div class="shortcut"><span>Play or pause the walkthrough</span><kbd>Space</kbd></div><div class="shortcut"><span>Enter or exit browser fullscreen</span><kbd>F</kbd></div><div class="shortcut"><span>Hide or show presenter controls</span><kbd>H</kbd></div><div class="shortcut"><span>Phone-only view / story and phone</span><kbd>P</kbd></div><div class="shortcut"><span>Previous or next demo stage</span><kbd>← →</kbd></div><div class="shortcut"><span>Reset the demonstration</span><kbd>R</kbd></div></div><p class="fine-print">Offline HTML prototype; no live checks or real push notifications. The locked phone and notification are simulated inside this page. Opening the alert simulates app access, not real authentication. Acknowledgement is a local “seen” confirmation for this session, not a fix or a command to the monitored system. Sample timestamps are not measured response times. This version ends at acknowledgement.</p></section></div><noscript><div class="help-backdrop"><section class="help-card"><h2>Enable JavaScript to play the demo.</h2><p>This HTML file contains an interactive phone simulation. Open it in a browser with JavaScript enabled.</p></section></div></noscript>
 <script>
 (()=>{
 'use strict';
@@ -70,25 +81,85 @@ Object.assign(paths,{
 });
 const icon=name=>`<svg aria-hidden="true" viewBox="0 0 24 24">${paths[name]||paths.bell}</svg>`;
 const $=id=>document.getElementById(id);
-const states=['quiet','alert','detail','ack'];
-const stageTimes=[0,3000,8000,13000],duration=20000;
+const sampleHealth=Object.freeze({brokenQueues:4,nodesDown:5,nodesTotal:16});
+function encodeHealthSnapshot(snapshot){
+ const {brokenQueues,nodesDown,nodesTotal}=snapshot;
+ if(![brokenQueues,nodesDown,nodesTotal].every(value=>Number.isSafeInteger(value)&&value>=0&&value<=99)||nodesDown>nodesTotal)throw new RangeError('Invalid demo health snapshot');
+ const downNodes=Array.from({length:nodesDown},(_,index)=>`demo-n${index+1}`).join(';');
+ const packet=`CMS1of1.24h.BK${brokenQueues}.FM0.ND${nodesDown}.N${nodesTotal-nodesDown}d${nodesTotal}.QP:DemoQP;${brokenQueues}.DN:${downNodes}.01Jan26 02:07`;
+ if(packet.length>160)throw new RangeError('Demo packet exceeds one SMS segment');
+ return packet;
+}
+function decodeHealthSnapshot(packet){
+ if(typeof packet!=='string'||packet.length>160||!/^CMS1of1\.24h\./.test(packet))throw new TypeError('Invalid demo SMS frame');
+ const field=name=>{const match=packet.match(new RegExp(`(?:^|\\.)${name}(\\d+)(?:\\.|$)`));if(!match)throw new TypeError('Missing demo SMS field');return Number(match[1]);};
+ const count=packet.match(/(?:^|\.)N(\d+)d(\d+)(?:\.|$)/);
+ if(!count)throw new TypeError('Missing demo node count');
+ const result={brokenQueues:field('BK'),nodesDown:field('ND'),nodesLive:Number(count[1]),nodesTotal:Number(count[2])};
+ if(result.nodesDown!==result.nodesTotal-result.nodesLive||Object.values(result).some(value=>!Number.isSafeInteger(value)||value<0||value>99))throw new TypeError('Inconsistent demo SMS counts');
+ return Object.freeze(result);
+}
+const samplePacket=encodeHealthSnapshot(sampleHealth);
+const decodedSample=decodeHealthSnapshot(samplePacket);
+const states=['quiet','failure','encoded','alert','detail','ack'];
+const stageTimes=[0,3500,7000,11000,16000,21500],duration=27000;
 let state='quiet',playing=false,elapsed=0,completed=false,startedAt=0,frame=0;
 let soundEnabled=false,audio=null,toastTimer=0,tapTimer=0,helpFocus=null,resumeAfterHelp=false;
 let cues=new Set();
 const story={
- quiet:['01 / Automatic checks','Nothing to open.<br><em>Nothing to watch.</em>','Approved checks run in the background. The phone stays locked; normal results need no routine attention.','lock','Pager stays closed until an alert needs you.','Mobile concept · app-closed delivery must be validated on real devices.'],
- alert:['02 / The alert arrives','The alert<br><em>comes to you.</em>','A covered check fails. Pager brings the notification to the configured recipient—without anyone watching a dashboard.','bell','Tap the notification on the phone.','Simulated incoming notification · sample data.'],
- detail:['03 / Failure context','See what failed.<br><em>Acknowledge it.</em>','Open the alert to see the service, expected state and observed failure. One action confirms you have seen it.','user','One clear action: acknowledge the alert.','One-way information flow · no command goes back to the source.'],
- ack:['04 / Acknowledged','Alert seen.<br><em>Journey complete.</em>','The acknowledgement confirms the alert was seen. Investigation and repair stay in the existing support process.','check','Acknowledged does not mean fixed.','End of this app journey · acknowledgement is local to this demo.']
+ quiet:['01 / The problem','Manual night checks<br><em>do not scale.</em>','Routine Pega health checks consumed night-shift time, even when everything was healthy. The phone stays locked until an exception needs attention.','lock','Start with a normal overnight check.','Normal results stay quiet; exception results start the alert path.'],
+ failure:['02 / Sample failure','Four broken queues.<br><em>Five nodes down.</em>','A sample check finds four broken queue processors and five of sixteen nodes unavailable. Those failures become one alert record.','warning','The check result now needs an alert.','Failure counts are normalized before the SMS is assembled.'],
+ encoded:['03 / Compact message','Turn symptoms into<br><em>one SMS frame.</em>','Compact BK, ND and N fields carry queue and node counts. The Android receiver reassembles, deduplicates and decodes incoming CMS messages.','signal','Inspect the wire frame and decoded fields.','CMS1of1 frames the SMS; BK, ND and N identify the failure counts.'],
+ alert:['04 / On the phone','The alert<br><em>comes to you.</em>','Android receives the SMS broadcast and builds a high-priority notification. The app requests a full-screen lock-screen alert when OS permissions allow.','bell','Tap the notification on the phone.','SMS_RECEIVED -> buffer -> notification -> lock-screen alert.'],
+ detail:['05 / Decoded context','See what failed.<br><em>Acknowledge it.</em>','The recipient sees parsed queue and node failures in the phone app. Acknowledge confirms the alert was seen, not that the incident is fixed.','user','Open the alert and inspect the counters.','The phone renders the same failure counts decoded from the message.'],
+ ack:['06 / Human handoff','Alert seen.<br><em>Journey complete.</em>','A local acknowledgement ends the phone alert. Investigation and repair stay with the support team; acknowledgement is not an automated fix.','check','Acknowledged does not mean fixed.','The alert is seen; investigation and recovery are separate steps.']
 };
+const trace={
+ quiet:{rows:[['Before','Manual night-shift checks'],['Goal','Only exceptions page a person'],['Phone','Locked and quiet'],['Input','Health-check result']],note:'Normal results stay quiet; an exception starts the Pager path.'},
+ failure:{rows:[['Broken QPs',`${decodedSample.brokenQueues} sample failures`],['Nodes down',`${decodedSample.nodesDown} of ${decodedSample.nodesTotal}`],['Decision','Exception -> mobile alert'],['Phone','Still locked']],note:'The failure result drives the alert, rather than another manual dashboard check.'},
+ encoded:{rows:[['Frame','CMS1of1 / 24h window'],['BK4','4 broken queue processors'],['ND5','5 unavailable nodes'],['N11d16','11 live of 16 total']],wire:samplePacket,note:'BK, ND and N carry the counts. Multipart frames are reassembled and deduplicated before parsing.'},
+ alert:{rows:[['OS event','SMS_RECEIVED broadcast'],['Receiver','Multipart buffer + dedupe'],['Alert','High-importance full-screen intent'],['Wake','showWhenLocked + turnScreenOn']],note:'The receiver builds the notification; lock-screen display depends on device permissions.'},
+ detail:{rows:[['Decoder',`BK${decodedSample.brokenQueues} -> broken QPs`],['Node state',`${decodedSample.nodesLive}/${decodedSample.nodesTotal} live`],['Recipient','Sees the failure context'],['Next action','Acknowledge on device']],note:'The phone renders the same values decoded from the compact message.'},
+ ack:{rows:[['Phone','Alert seen locally'],['Incident','Not yet repaired'],['Support','Human investigation follows'],['Demo','Complete']],note:'Acknowledgement records that someone saw the alert; repair is a separate support action.'}
+};
+function renderTrace(){
+ const view=trace[state],container=$('traceItems');
+ container.replaceChildren();
+ view.rows.forEach(([label,value])=>{
+  const row=document.createElement('div'),name=document.createElement('strong'),detail=document.createElement('span');
+  row.className='trace-item';name.textContent=label;detail.textContent=value;row.append(name,detail);container.append(row);
+ });
+ $('wirePayload').hidden=!view.wire;
+ $('wirePayload').textContent=view.wire??'';
+ $('traceNote').textContent=view.note;
+}
 
 function shell(content,time='02:07'){return `<div class="island"></div><div class="sysbar"><span>${time}</span><span class="sysicons">${icon('signal')}${icon('battery')}</span></div>${content}<div class="homebar"></div>`}
-function brand(){return `<div class="app-head"><div class="brand">${icon('bell')}Pager</div><span class="env">Demo · PROD</span></div>`}
-function lockFooter(){return `<div class="lock-bottom"><span class="circle-icon">${icon('light')}</span><span class="unlock-text">${state==='quiet'?'Pager is closed':'Tap notification to open'}</span><span class="circle-icon">${icon('camera')}</span></div>`}
-function notification(){return `<button class="notification" id="notification" aria-label="Open Pager alert"><div class="noti-top"><span class="appmini">${icon('bell')}</span><span>PAGER</span><time>now</time></div><div class="noti-env">CRITICAL · DEMO ENV</div><h2>Health check failed</h2><p>A service check needs your attention. Open Pager for details.</p><div class="noti-action"><span>View alert</span>${icon('arrow')}</div></button>`}
-function showLock(){const time=state==='quiet'?'02:00':'02:07';const content=`<div class="lock-body"><div class="lock-mark">${icon('lock')}</div><div class="clock">${time}</div><div class="lock-date">Overnight · sample scenario</div>${state==='quiet'?'<div class="empty-notif">No notifications</div>':notification()}${state==='alert'?'<div class="noti-after">Tap when you are ready to view the alert.</div>':''}${lockFooter()}</div>`;$('screen').className='screen lock';$('screen').innerHTML=shell(content,time);if($('notification'))$('notification').onclick=()=>openAlert()}
-function showDetail(){let content='';if(state==='detail'){content=`<span class="status-chip">${icon('warning')} CRITICAL · NOT ACKNOWLEDGED</span><h2>Stream service<br>stopped</h2><div class="small-id">PGR-DEMO-042 · detected 02:07</div><div class="facts"><div class="fact"><small>Expected</small><b>Running</b></div><div class="fact"><small>Observed</small><b class="red-text">Stopped</b></div></div><p class="summary">The latest automated service check failed.</p><div class="owner-row"><span class="avatar">D</span><div><small>Alert recipient</small><strong>Service developer</strong></div></div><button class="primary" id="acknowledge">${icon('check')}Acknowledge</button><div class="fine">Confirm you have seen this alert.<br>This does not fix the source system.</div><button class="evidence-toggle" id="evidenceToggle" aria-expanded="false">View check evidence</button><div class="evidence" id="evidence" hidden>Check: Stream service\nExpected: Running\nObserved: Stopped\nResult: Fail · 02:07\nSource: synthetic demo signal</div>`}
-else{content=`<span class="status-chip good">${icon('check')} ACKNOWLEDGED</span><h2>You've seen<br>the alert.</h2><div class="small-id">PGR-DEMO-042 · DEMO ENV</div><div class="ack-banner">${icon('check')}<div><strong>Acknowledged</strong><small>On this device · 02:08</small></div></div><div class="flow"><div class="flow-row"><strong>Failure detected</strong><small>Automatic check · 02:07</small></div><div class="flow-row"><strong>Mobile alert displayed</strong><small>Sent to the configured recipient.</small></div><div class="flow-row"><strong>Alert acknowledged</strong><small>Local “seen” confirmation in this demo.</small></div></div><div class="review-card"><b>No command sent to the source.</b><br>Investigation and repair stay in the existing support process.</div><div class="end-label">END OF THE APP JOURNEY</div>`};$('screen').className='screen';$('screen').innerHTML=shell(brand()+`<div class="app-body ${state==='ack'?'ack-screen':''}">${content}</div>`,state==='ack'?'02:08':'02:07');if($('acknowledge'))$('acknowledge').onclick=()=>acknowledge();if($('evidenceToggle'))$('evidenceToggle').onclick=()=>{const e=$('evidence');e.hidden=!e.hidden;$('evidenceToggle').setAttribute('aria-expanded',String(!e.hidden));$('evidenceToggle').textContent=e.hidden?'View check evidence':'Hide check evidence'};}
+function brand(){return `<div class="app-head"><div class="brand">${icon('bell')}Pager</div><span class="env">DEMO / OFFLINE</span></div>`}
+function lockFooter(){return `<div class="lock-bottom"><span class="circle-icon">${icon('light')}</span><span class="unlock-text">${state==='alert'?'Tap notification to open':'Pager is closed'}</span><span class="circle-icon">${icon('camera')}</span></div>`}
+function notification(){return `<button class="notification" id="notification" aria-label="Open Pager alert"><div class="noti-top"><span class="appmini">${icon('bell')}</span><span>PAGER</span><time>now</time></div><div class="noti-env">CRITICAL · DEMO ENV</div><h2>Pipeline health failed</h2><p id="notificationCounts"></p><div class="noti-action"><span>View alert</span>${icon('arrow')}</div></button>`}
+function showLock(){
+ const time=state==='quiet'?'02:00':'02:07';
+ const content=`<div class="lock-body"><div class="lock-mark">${icon('lock')}</div><div class="clock">${time}</div><div class="lock-date">Overnight · sample scenario</div>${state==='alert'?notification():'<div class="empty-notif">No notifications</div>'}${state==='alert'?'<div class="noti-after">Tap when you are ready to view the alert.</div>':''}${lockFooter()}</div>`;
+ $('screen').className='screen lock';$('screen').innerHTML=shell(content,time);
+ if($('notification')){$('notificationCounts').textContent=`${decodedSample.brokenQueues} broken queues · ${decodedSample.nodesDown} nodes down`;$('notification').onclick=()=>openAlert();}
+}
+function showDetail(){
+ let content='';
+ if(state==='detail'){
+  content=`<span class="status-chip">${icon('warning')} CRITICAL · NOT ACKNOWLEDGED</span><h2>Pipeline health<br>needs attention</h2><div class="small-id">PGR-DEMO-042 · detected 02:07</div><div class="facts"><div class="fact"><small>Broken queues</small><b id="detailQueues"></b></div><div class="fact"><small>Nodes down</small><b class="red-text" id="detailNodes"></b></div></div><p class="summary">The sample SMS was decoded on this device.</p><div class="owner-row"><span class="avatar">D</span><div><small>Alert recipient</small><strong>Service developer</strong></div></div><button class="primary" id="acknowledge">${icon('check')}Acknowledge</button><div class="fine">Confirm you have seen this alert.<br>Acknowledgement does not resolve the incident.</div><button class="evidence-toggle" id="evidenceToggle" aria-expanded="false">View check evidence</button><div class="evidence" id="evidence" hidden></div>`;
+ }else{
+  content=`<span class="status-chip good">${icon('check')} ACKNOWLEDGED</span><h2>You've seen<br>the alert.</h2><div class="small-id">PGR-DEMO-042 · DEMO ENV</div><div class="ack-banner">${icon('check')}<div><strong>Acknowledged</strong><small>On this device · 02:08</small></div></div><div class="flow"><div class="flow-row"><strong>Failure detected</strong><small>Sample check · 02:07</small></div><div class="flow-row"><strong>Mobile alert displayed</strong><small>Sample SMS delivered to the phone.</small></div><div class="flow-row"><strong>Alert acknowledged</strong><small>Local “seen” confirmation in this demo.</small></div></div><div class="review-card"><b>No remediation command is sent.</b><br>Investigation and repair stay in the existing support process.</div><div class="end-label">END OF THE APP JOURNEY</div>`;
+ }
+ $('screen').className='screen';$('screen').innerHTML=shell(brand()+`<div class="app-body ${state==='ack'?'ack-screen':''}">${content}</div>`,state==='ack'?'02:08':'02:07');
+ if(state==='detail'){
+  $('detailQueues').textContent=String(decodedSample.brokenQueues);
+  $('detailNodes').textContent=String(decodedSample.nodesDown);
+  $('evidence').textContent=`Frame: CMS1of1 · 24h\nBK: ${decodedSample.brokenQueues} broken queues\nND: ${decodedSample.nodesDown} nodes down\nN: ${decodedSample.nodesLive}/${decodedSample.nodesTotal} live\nSource: synthetic demo signal`;
+ }
+ if($('acknowledge'))$('acknowledge').onclick=()=>acknowledge();
+ if($('evidenceToggle'))$('evidenceToggle').onclick=()=>{const evidence=$('evidence');evidence.hidden=!evidence.hidden;$('evidenceToggle').setAttribute('aria-expanded',String(!evidence.hidden));$('evidenceToggle').textContent=evidence.hidden?'View check evidence':'Hide check evidence';};
+}
 
 
 function fitPhone(){
@@ -118,7 +189,8 @@ function render({announce=true}={}){
  $('storyPill').innerHTML=icon(s[3])+`<span>${s[4]}</span>`;$('stageFoot').textContent=s[5];
  $('steps').innerHTML=states.map((_,i)=>`<i class="${i<=ix?'active':''}"></i>`).join('');
  document.body.dataset.state=state;
- ['quiet','alert'].includes(state)?showLock():showDetail();
+ renderTrace();
+ ['quiet','failure','encoded','alert'].includes(state)?showLock():showDetail();
  if(announce)$('announcement').textContent=s[0]+'. '+s[2];
  if(focused){const el=$('screen').querySelector('h2')||$('screen');el.setAttribute('tabindex','-1');el.focus({preventScroll:true});}
  syncControls();fitPhone();
@@ -132,7 +204,7 @@ function setState(next){
  stop();completed=next==='ack';elapsed=completed?duration:stageTimes[states.indexOf(next)];cues.clear();change(next);
 }
 function reset(){stop();elapsed=0;completed=false;cues.clear();change('quiet');}
-function failure(){if(state==='quiet')setState('alert');}
+function failure(){if(state==='quiet')setState('failure');}
 function openAlert(){if(state==='alert')setState('detail');}
 function acknowledge(){if(state==='detail')setState('ack');}
 function tapTarget(id){
@@ -145,10 +217,10 @@ function tapTarget(id){
 }
 function tick(now){
  if(!playing)return;elapsed=Math.min(duration,now-startedAt);
- const next=elapsed<3000?'quiet':elapsed<8000?'alert':elapsed<13000?'detail':'ack';
+ let next=states[0];for(let index=1;index<states.length;index++){if(elapsed>=stageTimes[index])next=states[index];}
  if(next!==state)change(next);
- if(elapsed>=7500&&elapsed<8000&&!cues.has('open')){cues.add('open');tapTarget('notification');}
- if(elapsed>=12500&&elapsed<13000&&!cues.has('ack')){cues.add('ack');tapTarget('acknowledge');}
+ if(elapsed>=15500&&elapsed<16000&&!cues.has('open')){cues.add('open');tapTarget('notification');}
+ if(elapsed>=21000&&elapsed<21500&&!cues.has('ack')){cues.add('ack');tapTarget('acknowledge');}
  updateProgress();
  if(elapsed>=duration){playing=false;completed=true;clearTap();syncControls();return;}
  frame=requestAnimationFrame(tick);
@@ -201,7 +273,7 @@ function hideHelp(){
  if($('helpBackdrop').hidden)return;$('helpBackdrop').hidden=true;$('stage').inert=false;$('topbar').inert=false;$('toolbar').inert=document.body.classList.contains('controls-hidden');
  if(helpFocus)helpFocus.focus();if(resumeAfterHelp){resumeAfterHelp=false;play();}
 }
-$('logo').innerHTML=icon('bell');$('sound').innerHTML=icon('mute');$('focusIcon').innerHTML=icon('phone');$('fullIcon').innerHTML=icon('full');$('controlsToggle').innerHTML=icon('controls');$('help').innerHTML=icon('help');$('closeHelp').innerHTML=icon('close');$('failure').innerHTML=icon('bell')+'<span>Trigger alert</span>';$('reset').innerHTML=icon('refresh');
+$('logo').innerHTML=icon('bell');$('sound').innerHTML=icon('mute');$('focusIcon').innerHTML=icon('phone');$('fullIcon').innerHTML=icon('full');$('controlsToggle').innerHTML=icon('controls');$('help').innerHTML=icon('help');$('closeHelp').innerHTML=icon('close');$('failure').innerHTML=icon('bell')+'<span>Inject failure</span>';$('reset').innerHTML=icon('refresh');
 $('play').onclick=()=>play({fullscreen:elapsed===0&&!playing});$('failure').onclick=failure;$('reset').onclick=reset;
 $('sound').onclick=toggleSound;$('fullscreen').onclick=toggleFullscreen;$('focusPhone').onclick=togglePhone;$('controlsToggle').onclick=toggleControls;
 $('help').onclick=showHelp;$('closeHelp').onclick=hideHelp;$('helpBackdrop').onclick=e=>{if(e.target===$('helpBackdrop'))hideHelp();};
@@ -212,7 +284,7 @@ document.addEventListener('keydown',e=>{
  const key=e.key.toLowerCase();
  if(key==='f'){e.preventDefault();toggleFullscreen();}else if(key==='h'){e.preventDefault();toggleControls();}else if(key==='p'){e.preventDefault();togglePhone();}else if(key==='r'){e.preventDefault();reset();}
  else if(key==='?'||key==='k'){e.preventDefault();showHelp();}
- else if(key==='arrowright'||key==='n'){e.preventDefault();const i=states.indexOf(state);if(i<3)setState(states[i+1]);}
+ else if(key==='arrowright'||key==='n'){e.preventDefault();const i=states.indexOf(state);if(i<states.length-1)setState(states[i+1]);}
  else if(key==='arrowleft'){e.preventDefault();const i=states.indexOf(state);if(i>0)setState(states[i-1]);}
  else if(e.code==='Space'&&!e.target.closest('button,summary')){e.preventDefault();play();}
 });
@@ -220,7 +292,8 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden&&playing)pa
 document.addEventListener('fullscreenchange',fullscreenChanged);document.addEventListener('webkitfullscreenchange',fullscreenChanged);
 window.addEventListener('resize',fitPhone);if(window.visualViewport)window.visualViewport.addEventListener('resize',fitPhone);
 if('ResizeObserver' in window)new ResizeObserver(fitPhone).observe($('phoneWrap'));
-window.PagerDemo=Object.freeze({setState,getState:()=>({state,playing,elapsed,completed,soundEnabled,fullscreen:isFullscreen(),phoneOnly:document.body.classList.contains('phone-only')}),play,pause,reset,toggleFullscreen,toggleControls,togglePhone});
+window.PagerDemo=Object.freeze({setState,getState:()=>({state,playing,elapsed,completed,soundEnabled,fullscreen:isFullscreen(),phoneOnly:document.body.classList.contains('phone-only')}),encodeHealthSnapshot,decodeHealthSnapshot,play,pause,reset,toggleFullscreen,toggleControls,togglePhone});
+if(window.matchMedia('(max-width:760px)').matches)$('engineRoom').open=false;
 const q=new URLSearchParams(location.search);const initial=q.get('state')||q.get('stage');if(initial&&states.includes(initial))setState(initial);else render({announce:false});if(q.has('clean'))toggleControls();if(q.has('phone'))togglePhone();fitPhone();
 })();
 
