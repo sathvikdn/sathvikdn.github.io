@@ -57,6 +57,8 @@ body.controls-hidden{--bottom:28px}.controls-hidden .presenter-toolbar{transform
 @media(max-width:760px){.engine-room{position:absolute;z-index:9;top:48px;left:4px;right:4px;max-width:none;margin:0;padding:9px 11px;text-align:left;box-shadow:0 12px 35px #0009}.engine-room:not([open]){background:#17323d}.engine-room[open]{max-height:min(48vh,310px);overflow:auto}.engine-room summary{font-size:9px}.engine-room summary small{font-size:8px}.trace-item{padding:7px}.trace-item span{font-size:10px}.trace-note{display:block!important}.story .steps{display:none}}
 @media(max-width:760px){.stage-controls{justify-content:space-between;gap:2px;overflow-x:auto}.stage-control{flex:0 1 auto;min-width:0;padding:7px 2px;font-size:9px;gap:0}.stage-control .step-num{display:none}}
 @media(max-height:720px) and (min-width:761px){.engine-room{margin-top:10px;padding:10px 12px}.trace-grid{margin-top:7px}.trace-item{padding:7px}.trace-note{margin-top:5px!important}.story .steps{margin-top:11px}}
+@media(max-height:720px) and (min-width:761px){.stage{grid-template-rows:minmax(0,1fr)}.story,.phone-wrap{min-height:0}.engine-room[open]{position:absolute;top:0;left:0;right:0;max-height:100%;margin:0;overflow-y:auto;box-shadow:0 14px 38px #000b}}
+@media(max-height:400px) and (min-width:761px){.story p,.story .stage-pill,.story .steps{display:none}.story h1{font-size:clamp(22px,7vh,30px);line-height:1.05;margin-bottom:10px}.eyebrow{margin-bottom:8px}.engine-room{margin-top:8px}}
 </style></head>
 <body data-state="quiet">
 <header class="top" id="topbar"><div class="top-identity"><div class="brand"><span class="brand-mark" id="logo"></span>Pager</div><span class="top-caption">DEMO SERVICE / Mobile alert experience</span></div><div class="top-actions"><span class="sample-tag">Interactive concept</span><button class="toolbar-icon" id="sound" aria-label="Enable demo sound" aria-pressed="false" title="Enable demo sound"></button><button class="toolbar-text" id="focusPhone" aria-label="Show phone only" aria-pressed="false" title="Phone-only view (P)"><span id="focusIcon"></span><span class="button-label" id="focusLabel">Phone only</span></button><button class="toolbar-text" id="fullscreen" aria-label="Enter fullscreen" title="Toggle fullscreen (F)"><span id="fullIcon"></span><span class="button-label" id="fullLabel">Fullscreen</span></button><button class="toolbar-icon" id="controlsToggle" aria-label="Hide presenter controls" aria-expanded="true" aria-controls="toolbar" title="Hide presenter controls (H)"></button><button class="toolbar-icon help-toggle" id="help" aria-label="Help and keyboard shortcuts" title="Help and keyboard shortcuts"></button></div></header>
@@ -106,6 +108,7 @@ const stageTimes=[0,3500,7000,11000,16000,21500],duration=27000;
 let state='quiet',playing=false,elapsed=0,completed=false,startedAt=0,frame=0;
 let soundEnabled=false,audio=null,toastTimer=0,tapTimer=0,helpFocus=null,resumeAfterHelp=false;
 let cues=new Set();
+let compactTrace=window.matchMedia('(max-width:760px), (max-height:720px)').matches;
 const story={
  quiet:['01 / The problem','Manual night checks<br><em>do not scale.</em>','Routine Pega health checks consumed night-shift time, even when everything was healthy. The phone stays locked until an exception needs attention.','lock','Start with a normal overnight check.','Normal results stay quiet; exception results start the alert path.'],
  failure:['02 / Sample failure','Four broken queues.<br><em>Five nodes down.</em>','A sample check finds four broken queue processors and five of sixteen nodes unavailable. Those failures become one alert record.','warning','The check result now needs an alert.','Failure counts are normalized before the SMS is assembled.'],
@@ -163,6 +166,9 @@ function showDetail(){
 
 
 function fitPhone(){
+ const compact=window.matchMedia('(max-width:760px), (max-height:720px)').matches;
+ if(compact&&!compactTrace)$('engineRoom').open=false;
+ compactTrace=compact;
  const wrap=$('phoneWrap').getBoundingClientRect();
  const scale=Math.max(.08,Math.min((wrap.width-18)/350,(wrap.height-12)/710));
  document.documentElement.style.setProperty('--phone-scale',scale.toFixed(5));
@@ -293,7 +299,7 @@ document.addEventListener('fullscreenchange',fullscreenChanged);document.addEven
 window.addEventListener('resize',fitPhone);if(window.visualViewport)window.visualViewport.addEventListener('resize',fitPhone);
 if('ResizeObserver' in window)new ResizeObserver(fitPhone).observe($('phoneWrap'));
 window.PagerDemo=Object.freeze({setState,getState:()=>({state,playing,elapsed,completed,soundEnabled,fullscreen:isFullscreen(),phoneOnly:document.body.classList.contains('phone-only')}),encodeHealthSnapshot,decodeHealthSnapshot,play,pause,reset,toggleFullscreen,toggleControls,togglePhone});
-if(window.matchMedia('(max-width:760px)').matches)$('engineRoom').open=false;
+if(compactTrace)$('engineRoom').open=false;
 const q=new URLSearchParams(location.search);const initial=q.get('state')||q.get('stage');if(initial&&states.includes(initial))setState(initial);else render({announce:false});if(q.has('clean'))toggleControls();if(q.has('phone'))togglePhone();fitPhone();
 })();
 
