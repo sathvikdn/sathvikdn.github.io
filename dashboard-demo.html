@@ -1002,7 +1002,12 @@
 }
 
 body{margin:0;background:#070b14}body:has(#cms-dash-root.light-mode){background:#e8e4dc}#cms-dash-root{min-height:100vh!important}#cms-dash-root tr[hidden]{display:none!important}#cms-dash-root .modal-json{white-space:pre-wrap;overflow-wrap:anywhere}#cms-dash-root .offset-badge{cursor:pointer}#cms-dash-root .data-table tr.chart-picked{background:var(--hover-tint)!important;box-shadow:inset 3px 0 0 var(--accent)}#cms-dash-root .demo-error-note{margin:.35rem 0 1rem;color:var(--text-dim);font-size:.78rem;line-height:1.5}
-@media(max-width:600px){#cms-dash-root #dashboard-main .kpi .value{font-size:1.25rem!important;line-height:1.22!important}#cms-dash-root #dashboard-main .kpi .value[data-long-status]{font-size:0.85rem!important;line-height:1.35!important}#cms-dash-root .tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}#cms-dash-root .tabs::-webkit-scrollbar{display:none}}#cms-dash-root.embed-mobile #dashboard-main .kpi .value{font-size:1.25rem!important}#cms-dash-root.embed-mobile #dashboard-main .kpi .value[data-long-status]{font-size:0.85rem!important}@container cms-dashboard (max-width:600px){#cms-dash-root #dashboard-main .kpi .value[data-long-status]{font-size:0.85rem!important;line-height:1.35!important}}</style></head><body><div id="cms-dash-root"><div id="dashboard-main" style="">
+@media(max-width:600px){#cms-dash-root #dashboard-main .kpi .value{font-size:1.25rem!important;line-height:1.22!important}#cms-dash-root #dashboard-main .kpi .value[data-long-status]{font-size:0.85rem!important;line-height:1.35!important}#cms-dash-root .tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}#cms-dash-root .tabs::-webkit-scrollbar{display:none}}#cms-dash-root.embed-mobile #dashboard-main .kpi .value{font-size:1.25rem!important}#cms-dash-root.embed-mobile #dashboard-main .kpi .value[data-long-status]{font-size:0.85rem!important}@container cms-dashboard (max-width:600px){#cms-dash-root #dashboard-main .kpi .value[data-long-status]{font-size:0.85rem!important;line-height:1.35!important}}</style><style>
+#cms-dash-root .portfolio-return{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;min-height:clamp(38px,3cqw,52px);padding:0 14px;border:1px solid var(--accent);border-radius:7px;background:var(--surface-1);color:var(--accent);font-size:clamp(12px,.8cqw,16px);font-weight:700;line-height:1;text-decoration:none;white-space:nowrap}
+#cms-dash-root .portfolio-return:hover{background:var(--hover-tint)}
+#cms-dash-root .portfolio-return:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+@container cms-dashboard (max-width:520px){#cms-dash-root .action-group{flex-wrap:wrap}#cms-dash-root .action-group .status{flex:1 0 100%;max-width:none;margin-right:0}#cms-dash-root .portfolio-return{min-width:90px;min-height:38px;padding:0 9px}}
+</style></head><body><div id="cms-dash-root"><div id="dashboard-main" style="">
         <div class="header">
             <h1>Operations Activity Dashboard</h1>
             <div class="subtitle" id="header-subtitle">R01 - Demo region | 2026-10-29 19:00:00 to 2026-10-29 22:52:00</div>
@@ -1020,6 +1025,7 @@ body{margin:0;background:#070b14}body:has(#cms-dash-root.light-mode){background:
                 <span class="status" id="fetch-status">Preloaded sample - no live connection</span>
                 <button type="button" id="btn-home">Monitoring</button>
                 <button type="button" id="btn-fetch">Reset view</button>
+                <a id="portfolio-return" class="portfolio-return" href="./" aria-label="Visit full portfolio">Full portfolio</a>
             </div>
         </div>
 
@@ -2381,6 +2387,12 @@ body{margin:0;background:#070b14}body:has(#cms-dash-root.light-mode){background:
 
   dashboard.querySelectorAll('.btn-clear').forEach((button) => button.addEventListener('click', clearFilters))
   document.getElementById('btn-home')?.addEventListener('click', () => showTab('monitoring'))
+  document.getElementById('portfolio-return')?.addEventListener('click', (event) => {
+    if (window.self !== window.top) {
+      event.preventDefault()
+      window.parent.postMessage({ type: 'close-dashboard-demo' }, '*')
+    }
+  })
   document.getElementById('btn-fetch')?.addEventListener('click', () => {
     clearFilters()
     showTab('monitoring')
